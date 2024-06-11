@@ -1,0 +1,24 @@
+{
+  "name": "uma",
+  "version": "1.0.0",
+  "description": "created and developed by Kunal Chauhan with Love",
+  "main": "main.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kunal-Chauhan7/uma.git"
+  },
+  "author": "Kunal Chauhan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kunal-Chauhan7/uma/issues"
+  },
+  "homepage": "https://github.com/Kunal-Chauhan7/uma#readme",
+  "keywords": [],
+  "dependencies": {
+    "qrcode-terminal": "^0.12.0",
+    "whatsapp-web.js": "github:pedroslopez/whatsapp-web.js#webpack-exodus"
+  }
+}
