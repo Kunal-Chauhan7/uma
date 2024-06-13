@@ -1,5 +1,7 @@
 const {Client} = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
+const { flipACoin } = require('./Gamble/Gamble');
+const {greet} = require('./UserInteraction/UserInteraction');
 
 const client = new Client(); // create an client object
 
@@ -14,6 +16,12 @@ client.on('message_create',message=>{
     if(message.body==="!ping"){
         client.sendMessage(message.from,'pong');
     }
+    if(message.body==='Hey uma'){
+        const Contact = message.getContact();
+        greet(message,Contact);
+    }
+    if(message.body==='!flip'){
+        flipACoin(message);
+    }
 });
-
 client.initialize(); // starts and ask for the auth process.
