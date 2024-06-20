@@ -5,6 +5,7 @@ const {greet} = require('./UserInteraction/UserInteraction');
 const fs = require('fs');
 const mime = require('mime-types');
 const axios = require('axios');
+const { getPokemon } = require('./media/Pokemon');
 
 const client = new Client({
     authStrategy:new LocalAuth(),
@@ -64,9 +65,25 @@ client.on('message_create', async message=>{
         }
     }
     if(content==='!meme'){
-        const meme = await axios("https://meme-api.com/gimme").then(res=>res.data)
+        const meme = await axios("https://meme-api.com/gimme").then(res=>res.data);
         const media = await MessageMedia.fromUrl(meme.url);
         await client.sendMessage(message.from,media);
+    }
+    if(content.startsWith("!pokemon")){
+        const pokemonData = await getPokemon(content);
+        if(pokemonData.status!=="Found"){
+            await client.searchMessages(message.from,'Pokemon Not found')
+        }
+        else{
+            const media = await MessageMedia.fromUrl(pokemonData.img);
+            await client.sendMessage(message.from,media,{caption:`
+                *Name : ${pokemonData.name}*
+                *height : ${pokemonData.h}*
+                *weight :${pokemonData.w}*
+                *PokeIndex:${pokemonData.PokeIndex}*
+                `});
+        }
+
     }
 });
 client.initialize(); // starts and ask for the auth process.
