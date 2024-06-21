@@ -3,11 +3,8 @@ const getPokemon = async(pokemon)=>{
     let pokemonMessage = pokemon.split(" ");
     let PokemonName = pokemonMessage[1]; 
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${PokemonName}`)
-    if(res.status!==200){
-        pokemonData = {
-            "status":"NotFound"
-        }
-        console.log("NO such pokemon Found")
+    if (res.status !== 200) {
+        return { "status": "NotFound" };
     }
     else{
         const data = await fetch(res.url).then(res => res.json());
@@ -17,7 +14,7 @@ const getPokemon = async(pokemon)=>{
             "w":data.weight,
             "PokeIndex":data.id,
             "name":data.name,
-            "img":data.sprites.front_default,
+            "img":`https://img.pokemondb.net/artwork/large/${data.name}.jpg`,
         }
         return pokemonData;
     }

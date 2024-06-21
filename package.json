@@ -18,6 +18,7 @@
   "homepage": "https://github.com/Kunal-Chauhan7/uma#readme",
   "keywords": [],
   "dependencies": {
+    "anime-character-random": "^1.0.14",
     "axios": "^1.7.2",
     "mime-types": "^2.1.35",
     "qrcode-terminal": "^0.12.0",

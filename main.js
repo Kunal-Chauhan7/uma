@@ -6,6 +6,7 @@ const fs = require('fs');
 const mime = require('mime-types');
 const axios = require('axios');
 const { getPokemon } = require('./media/Pokemon');
+const { getRandom } = require('./anime/anime');
 
 const client = new Client({
     authStrategy:new LocalAuth(),
@@ -30,9 +31,11 @@ client.on('message_create', async message=>{
     if(content==='Hey uma'){
         const Contact = message.getContact();
         greet(message,Contact);
+        message.react("✅");
     }
     if(content==='!flip'){
         flipACoin(message);
+        message.react("✅");
     }
     if(content==='!sticker'){ // so if the message starts with !sticker then it's a sticker
         if(message.hasMedia){ // if a message has a media that media will be used to create stickers
@@ -49,11 +52,17 @@ client.on('message_create', async message=>{
                     try {
                         fs.writeFileSync(fullFilename, media.data, { encoding: 'base64' }); // create a file and name is this with a base64 encoding
                         MessageMedia.fromFilePath(filePath = fullFilename) // a MessageMedia from the the path
-                        client.sendMessage(message.from, new MessageMedia(media.mimetype, media.data, filename), {  // send the message with this property 
+                        message.reply(new MessageMedia(media.mimetype, media.data, filename),message.from,{  // send the message with this property 
                             sendMediaAsSticker: true,
                             stickerAuthor:"Kunal Chauhan",
                             stickerName:"Created By Kunal Chauhan & uma"
                         });
+                        message.react("✅");
+                        // client.sendMessage(message.from, new MessageMedia(media.mimetype, media.data, filename), {  // send the message with this property 
+                        //     sendMediaAsSticker: true,
+                        //     stickerAuthor:"Kunal Chauhan",
+                        //     stickerName:"Created By Kunal Chauhan & uma"
+                        // });
                         fs.unlinkSync(fullFilename) // so this right here is used to delete the file
                     } catch (err) {
                         console.log('Failed to save the file:', err);
@@ -67,7 +76,8 @@ client.on('message_create', async message=>{
     if(content==='!meme'){
         const meme = await axios("https://meme-api.com/gimme").then(res=>res.data);
         const media = await MessageMedia.fromUrl(meme.url);
-        await client.sendMessage(message.from,media);
+        message.react("✅")
+        message.reply(media,message.from,{caption:"*Here is a crispy Meme*"})
     }
     if(content.startsWith("!pokemon")){
         const pokemonData = await getPokemon(content);
@@ -76,14 +86,18 @@ client.on('message_create', async message=>{
         }
         else{
             const media = await MessageMedia.fromUrl(pokemonData.img);
-            await client.sendMessage(message.from,media,{caption:`
-                *Name : ${pokemonData.name}*
-                *height : ${pokemonData.h}*
-                *weight :${pokemonData.w}*
-                *PokeIndex:${pokemonData.PokeIndex}*
-                `});
+            message.react("✅")
+            message.reply(media,message.from,{caption:`*Name : ${pokemonData.name}*\n*height : ${pokemonData.h}*\n*weight :${pokemonData.w}*\n*PokeIndex:${pokemonData.PokeIndex}*`})
         }
 
+    }
+    if(content.startsWith("!getrandomanime")){
+        const data = await getRandom();
+        message.react("✅")
+        const media = await MessageMedia.fromUrl(data.CharacterImage);
+        message.reply(media,message.from,{caption:
+            `Anime Name : ${data.AnimeName}\nCharacter Name : ${data.CharacterName}
+            `})
     }
 });
 client.initialize(); // starts and ask for the auth process.
