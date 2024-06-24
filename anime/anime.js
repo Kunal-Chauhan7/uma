@@ -1,5 +1,7 @@
 const randomChar = require('anime-character-random');
-const axios= require('axios');
+const client = require('nekos.life');
+const neko = new client();
+
 
 const getRandom = async ()=>{
     const data = await randomChar.GetChar();
@@ -7,8 +9,12 @@ const getRandom = async ()=>{
 }
 
 const getWaifu = async ()=>{
-    const data = await axios(`https://api.waifu.pics/sfw/waifu`).then(res=>res.data);
-    return data.url;
+    const url = await neko.waifu();
+    return url.url;    
 }
 
-module.exports = {getRandom , getWaifu}
+const getFact = async ()=>{
+    const fact = await neko.fact();
+    return fact;
+}
+module.exports = {getRandom , getWaifu , getFact}

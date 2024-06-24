@@ -6,7 +6,7 @@ const fs = require('fs');
 const mime = require('mime-types');
 const axios = require('axios');
 const { getPokemon } = require('./media/Pokemon');
-const { getRandom, getWaifu } = require('./anime/anime');
+const { getRandom, getWaifu , getFact } = require('./anime/anime');
 
 // Initialize WhatsApp client
 const client = new Client({
@@ -116,10 +116,16 @@ client.on('message_create', async (message) => {
     // Command: !waifu
     else if(content.startsWith("!waifu")){
         const url = await getWaifu();
-        content
         const media = await MessageMedia.fromUrl(url)
         message.reply(media,message.from,{caption:"*Here You go Darling!!😘*"});
         message.react("😍");
+    }
+    // Command: !fact
+    else if(content.startsWith("!fact")){
+        let fact = await getFact();
+        fact = `_${fact.fact}_`;
+        message.reply(fact,message.from);
+        message.react("🤔");
     }
 });
 
