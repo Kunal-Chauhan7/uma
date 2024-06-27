@@ -52,7 +52,7 @@ client.on('message_create', async (message) => {
     }
     // Command: !sticker
     else if (content === '!sticker') {
-        if (message.hasMedia) {
+        if (message.hasMedia && message.type==='IMAGE') {
             message.downloadMedia().then(media => {
                 const mediaPath = './downloaded-media/';
                 if (!fs.existsSync(mediaPath)) {
