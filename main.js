@@ -6,7 +6,7 @@ const fs = require('fs');
 const mime = require('mime-types');
 const axios = require('axios');
 const { getPokemon } = require('./media/Pokemon');
-const { getRandom, getWaifu , getFact } = require('./anime/anime');
+const { getRandom, getWaifu , getFact, SearchAnime } = require('./anime/anime');
 
 // Initialize WhatsApp client
 const uma = new Client({
@@ -146,6 +146,16 @@ uma.on('message_create', async (message) => {
         fact = `_${fact.fact}_`;
         message.reply(fact,message.from);
         message.react("🤔");
+    }
+    else if(content.startsWith("!animeSearch")){
+        const data = await SearchAnime(content);
+        if(data.found){
+            const media = await MessageMedia.fromUrl(data.imgUrl);
+            message.reply(media,message.from,{
+                caption:`*${data.name}*\n*Mal Link* : ${data.malLink}\n*Mal Number* : ${data.malId}\n*Number Of Episodes* : ${data.episodes}\n*airing* : ${data.airing}\n*duration* : ${data.duration}\n*Summary* : ${data.summary}`
+            });
+            message.react("👍")
+        }
     }
 });
 
