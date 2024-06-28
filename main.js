@@ -9,7 +9,7 @@ const { getPokemon } = require('./media/Pokemon');
 const { getRandom, getWaifu , getFact } = require('./anime/anime');
 
 // Initialize WhatsApp client
-const client = new Client({
+const uma = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: {
         executablePath: "C:/Program Files/Google/Chrome/Application/chrome.exe",
@@ -17,17 +17,17 @@ const client = new Client({
 });
 
 // Event: when client is ready
-client.once('ready', () => {
-    console.log('Client is ready');
+uma.once('ready', () => {
+    console.log('Running...');
 });
 
 // Event: when QR code is generated
-client.on('qr', (qr) => {
+uma.on('qr', (qr) => {
     qrcode.generate(qr, { small: true });
 });
 
 // Event: when a new message is received
-client.on('message_create', async (message) => {
+uma.on('message_create', async (message) => {
     const content = message.body;
 
     // Ensure content is a string and not empty before processing
@@ -36,7 +36,7 @@ client.on('message_create', async (message) => {
     }
     // Command: !ping
     if (content === "!ping") {
-        client.sendMessage(message.from, 'pong');
+        uma.sendMessage(message.from, 'pong');
         message.react("✅");
     }
     // Command: Hey uma
@@ -52,30 +52,50 @@ client.on('message_create', async (message) => {
     }
     // Command: !sticker
     else if (content === '!sticker') {
-        if (message.hasMedia && message.type==='IMAGE') {
-            message.downloadMedia().then(media => {
-                const mediaPath = './downloaded-media/';
-                if (!fs.existsSync(mediaPath)) {
-                    fs.mkdirSync(mediaPath);
-                }
+        if(message.hasMedia && message.isGif){
+            message.downloadMedia().then(media=>{
+                message.reply(media,message.from,{
+                    sendMediaAsSticker:true,
+                    stickerAuthor: "Kunal Chauhan",
+                    stickerName: "Created By Kunal Chauhan & uma"});
+            });
+            message.react("✅");
+        }
+        else if (message.hasMedia) {
+            message.downloadMedia().then(async media => {
                 const extension = mime.extension(media.mimetype);
-                const filename = new Date().getTime();
-                const fullFilename = mediaPath + filename + '.' + extension;
-                try {
-                    fs.writeFileSync(fullFilename, media.data, { encoding: 'base64' });
-                    message.reply(new MessageMedia(media.mimetype, media.data, filename), message.from, {
-                        sendMediaAsSticker: true,
-                        stickerAuthor: "Kunal Chauhan",
-                        stickerName: "Created By Kunal Chauhan & uma"
+                if(extension==='jpeg'){
+                    const mediaPath = './downloaded-media/';
+                    if (!fs.existsSync(mediaPath)) {
+                        fs.mkdirSync(mediaPath);
+                    }
+                    const filename = new Date().getTime();
+                    const fullFilename = mediaPath + filename + '.' + extension;
+                    try {
+                        fs.writeFileSync(fullFilename, media.data, { encoding: 'base64' });
+                        message.reply(new MessageMedia(media.mimetype, media.data, filename), message.from, {
+                            sendMediaAsSticker: true,
+                            stickerAuthor: "Kunal Chauhan",
+                            stickerName: "Created By Kunal Chauhan & uma"
+                        });
+                        message.react("✅");
+                        fs.unlinkSync(fullFilename);
+                    } catch (err) {
+                        console.log('Failed to save the file:', err);
+                    }
+                }
+                else if(extension==='mp4'){
+                    message.downloadMedia().then(media=>{
+                        message.reply(media,message.from,{
+                            sendMediaAsSticker:true,
+                            stickerAuthor: "Kunal Chauhan",
+                            stickerName: "Created By Kunal Chauhan & uma"});
                     });
                     message.react("✅");
-                    fs.unlinkSync(fullFilename);
-                } catch (err) {
-                    console.log('Failed to save the file:', err);
                 }
             });
         } else {
-            message.reply(`Send an image with caption *!sticker* `);
+            message.reply(`Send an image or gif or video with caption *!sticker* `);
         }
     }
     // Command: !meme
@@ -89,7 +109,7 @@ client.on('message_create', async (message) => {
     else if (content.startsWith("!pokemon")) {
         const pokemonData = await getPokemon(content);
         if (pokemonData.status !== "Found") {
-            await client.searchMessages(message.from, 'Pokemon Not found');
+            await uma.searchMessages(message.from, 'Pokemon Not found');
         } else {
             const media = await MessageMedia.fromUrl(pokemonData.img);
             message.react("✅");
@@ -130,4 +150,4 @@ client.on('message_create', async (message) => {
 });
 
 // Initialize the client
-client.initialize();
+uma.initialize();
