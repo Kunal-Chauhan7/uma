@@ -26,6 +26,18 @@ uma.on('qr', (qr) => {
     qrcode.generate(qr, { small: true });
 });
 
+var reInitializeCount = 1;
+uma.on('disconnected', (reason) => {
+    //Just to reinitialize on the first page refresh
+    if(reInitializeCount === 1 && reason === 'NAVIGATION') {
+        reInitializeCount++;
+        client.initialize();
+        return;
+    }
+    //Your code for others' reasons for disconnections
+});
+
+
 // Event: when a new message is received
 uma.on('message_create', async (message) => {
     const content = message.body;
