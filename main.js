@@ -55,14 +55,15 @@ uma.on('message_create', async (message) => {
     else if (content === 'Hey uma') {
         const contact = message.getContact();
         greet(message, contact);
-        message.react("✅");
     }
     // Command: !flip
+    // Flip a coin
     else if (content === '!flip') {
         flipACoin(message);
         message.react("✅");
     }
     // Command: !sticker
+    // Convert an image or gif to a sticker
     else if (content === '!sticker') {
         if(message.hasMedia && message.isGif){
             message.downloadMedia().then(media=>{
@@ -111,6 +112,7 @@ uma.on('message_create', async (message) => {
         }
     }
     // Command: !meme
+    //  Get a random meme
     else if (content === '!meme') {
         const meme = await axios("https://meme-api.com/gimme").then(res => res.data);
         const media = await MessageMedia.fromUrl(meme.url);
@@ -118,6 +120,7 @@ uma.on('message_create', async (message) => {
         message.reply(media, message.from, { caption: "*Here is a crispy Meme*" });
     }
     // Command: !pokemon
+    // Get pokemon details
     else if (content.startsWith("!pokemon")) {
         const pokemonData = await getPokemon(content);
         if (pokemonData.status !== "Found") {
@@ -131,6 +134,7 @@ uma.on('message_create', async (message) => {
         }
     }
     // Command: !getrandomanime
+    // Get a random anime character
     else if (content.startsWith("!getrandomanime")) {
         const data = await getRandom();
         message.react("✅");
@@ -140,12 +144,14 @@ uma.on('message_create', async (message) => {
         });
     }
     // Command: !roll
+    // Roll a dice
     else if(content.startsWith("!roll")){
         let roll = ""+Math.floor(Math.random()*6);
         message.react("✅");
         message.reply(roll,message.from);
     }
     // Command: !waifu
+    // Get a random waifu
     else if(content.startsWith("!waifu")){
         const url = await getWaifu();
         const media = await MessageMedia.fromUrl(url)
@@ -153,12 +159,15 @@ uma.on('message_create', async (message) => {
         message.react("😍");
     }
     // Command: !fact
+    // Get a random fact
     else if(content.startsWith("!fact")){
         let fact = await getFact();
         fact = `_${fact.fact}_`;
         message.reply(fact,message.from);
         message.react("🤔");
     }
+    // Command: !animeSearch
+    // Search for an anime
     else if(content.startsWith("!animeSearch")){
         const data = await SearchAnime(content);
         if(data.found){
@@ -167,6 +176,25 @@ uma.on('message_create', async (message) => {
                 caption:`*${data.name}*\n*Mal Link* : ${data.malLink}\n*Mal Number* : ${data.malId}\n*Number Of Episodes* : ${data.episodes}\n*airing* : ${data.airing}\n*duration* : ${data.duration}\n*Summary* : ${data.summary}`
             });
             message.react("👍")
+        }
+    }
+    // Command: !everyone
+    // ping everyone in the group
+    else if(content.startsWith("!everyone")){
+        const chat = await message.getChat();
+        if(chat.isGroup){
+            let What_to_ping = content.substring(10);
+            let User_who_crteaed = message.getContact();
+            let messageContent = `@${(await User_who_crteaed).id.user} says : \n \n *_${What_to_ping}_* \n \n `;
+            let mentions = [];
+            for(let participant of chat.participants){
+                mentions.push(`${participant.id.user}@c.us`);
+                messageContent += `@${participant.id.user} `;
+            }
+            await chat.sendMessage(messageContent,{mentions});
+        }
+        else{
+            message.reply("You can only ping in groups");
         }
     }
 });
