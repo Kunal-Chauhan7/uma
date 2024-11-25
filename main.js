@@ -1,12 +1,13 @@
 const { Client, MessageMedia, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
-const { flipACoin } = require('./Gamble/Gamble');
+const { flipACoin, rollADice } = require('./Gamble/Gamble');
 const { greet } = require('./UserInteraction/UserInteraction');
 const fs = require('fs');
 const mime = require('mime-types');
 const axios = require('axios');
 const { getPokemon } = require('./media/Pokemon');
-const { getRandom, getWaifu , getFact, SearchAnime } = require('./anime/anime');
+const { getRandomAnime, getWaifu , getFact, SearchAnime } = require('./anime/anime');
+const { sendMeme } = require('./media/meme');
 
 // Initialize WhatsApp client
 const uma = new Client({
@@ -60,7 +61,6 @@ uma.on('message_create', async (message) => {
     // Flip a coin
     else if (content === '!flip') {
         flipACoin(message);
-        message.react("✅");
     }
     // Command: !sticker
     // Convert an image or gif to a sticker
@@ -114,69 +114,38 @@ uma.on('message_create', async (message) => {
     // Command: !meme
     //  Get a random meme
     else if (content === '!meme') {
-        const meme = await axios("https://meme-api.com/gimme").then(res => res.data);
-        const media = await MessageMedia.fromUrl(meme.url);
-        message.react("✅");
-        message.reply(media, message.from, { caption: "*Here is a crispy Meme*" });
+        sendMeme(message);
     }
     // Command: !pokemon
     // Get pokemon details
     else if (content.startsWith("!pokemon")) {
-        const pokemonData = await getPokemon(content);
-        if (pokemonData.status !== "Found") {
-            await uma.searchMessages(message.from, 'Pokemon Not found');
-        } else {
-            const media = await MessageMedia.fromUrl(pokemonData.img);
-            message.react("✅");
-            message.reply(media, message.from, {
-                caption: `*Name : ${pokemonData.name}*\n*Height : ${pokemonData.h}*\n*Weight : ${pokemonData.w}*\n*PokeIndex: ${pokemonData.PokeIndex}*`
-            });
-        }
+        getPokemon(content,message);
     }
     // Command: !getrandomanime
     // Get a random anime character
     else if (content.startsWith("!getrandomanime")) {
-        const data = await getRandom();
-        message.react("✅");
-        const media = await MessageMedia.fromUrl(data.CharacterImage);
-        message.reply(media, message.from, {
-            caption: `Anime Name : ${data.AnimeName}\nCharacter Name : ${data.CharacterName}`
-        });
+        getRandomAnime(message);
     }
     // Command: !roll
     // Roll a dice
     else if(content.startsWith("!roll")){
-        let roll = ""+Math.floor(Math.random()*6);
-        message.react("✅");
-        message.reply(roll,message.from);
+        rollADice(message);
     }
     // Command: !waifu
     // Get a random waifu
     else if(content.startsWith("!waifu")){
-        const url = await getWaifu();
-        const media = await MessageMedia.fromUrl(url)
-        message.reply(media,message.from,{caption:"*Here You go Darling!!😘*"});
-        message.react("😍");
+        getWaifu(message);
     }
     // Command: !fact
     // Get a random fact
     else if(content.startsWith("!fact")){
-        let fact = await getFact();
-        fact = `_${fact.fact}_`;
-        message.reply(fact,message.from);
-        message.react("🤔");
+        getFact(message);
+        
     }
     // Command: !animeSearch
     // Search for an anime
     else if(content.startsWith("!animeSearch")){
-        const data = await SearchAnime(content);
-        if(data.found){
-            const media = await MessageMedia.fromUrl(data.imgUrl);
-            message.reply(media,message.from,{
-                caption:`*${data.name}*\n*Mal Link* : ${data.malLink}\n*Mal Number* : ${data.malId}\n*Number Of Episodes* : ${data.episodes}\n*airing* : ${data.airing}\n*duration* : ${data.duration}\n*Summary* : ${data.summary}`
-            });
-            message.react("👍")
-        }
+        SearchAnime(content,message);
     }
     // Command: !everyone
     // ping everyone in the group

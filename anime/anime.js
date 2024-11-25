@@ -1,25 +1,34 @@
 const randomChar = require('anime-character-random');
-const client = require('nekos.life');
-const neko = new client();
+const Nekoclient = require('nekos.life');
+const neko = new Nekoclient();
 const axios = require('axios');
+const { MessageMedia } = require('whatsapp-web.js');
 
-
-const getRandom = async ()=>{
+const getRandomAnime = async (message) => {
     const data = await randomChar.GetChar();
-    return data;
+    message.react("✅");
+    const media = await MessageMedia.fromUrl(data.CharacterImage);
+    message.reply(media, message.from, {
+        caption: `Anime Name : ${data.AnimeName}\nCharacter Name : ${data.CharacterName}`
+    });
 }
 
-const getWaifu = async ()=>{
-    const url = await neko.waifu();
-    return url.url;    
+const getWaifu = async (message) => {
+    let urlWaifu = (await neko.waifu()).url;
+    const media = await MessageMedia.fromUrl(urlWaifu);
+    message.reply(media, message.from, { caption: "*Here You go Darling!!😘*" });
+    message.react("😍");
 }
 
-const getFact = async ()=>{
-    const fact = await neko.fact();
-    return fact;
+const getFact = async (message) => {
+    let fact = await neko.fact();
+    fact = `_${fact.fact}_`;
+    message.reply(fact, message.from);
+    message.react("🤔");
 }
 
-const SearchAnime = async (query) => {
+const SearchAnime = async (query, message) => {
+    let data = {};
     try {
         let SearchQuery = query.split(" ");
         if (SearchQuery.length > 1) {
@@ -28,8 +37,8 @@ const SearchAnime = async (query) => {
             let searchResult = response.data.data[0];
 
             if (searchResult) {
-                const data = {
-                    found:true,
+                data = {
+                    found: true,
                     name: `${searchResult.title_english} || ${searchResult.title_japanese}`,
                     malLink: searchResult.url,
                     malId: searchResult.mal_id,
@@ -39,16 +48,22 @@ const SearchAnime = async (query) => {
                     duration: searchResult.duration,
                     summary: searchResult.synopsis,
                 }
-                return data;
             } else {
-                const data = {
-                    found:false,
+                data = {
+                    found: false,
                 }
-                return data;
             }
+            if (data.found) {
+                const media = await MessageMedia.fromUrl(data.imgUrl);
+                message.reply(media, message.from, {
+                    caption: `*${data.name}*\n*Mal Link* : ${data.malLink}\n*Mal Number* : ${data.malId}\n*Number Of Episodes* : ${data.episodes}\n*airing* : ${data.airing}\n*duration* : ${data.duration}\n*Summary* : ${data.summary}`
+                });
+                message.react("👍")
+            }
+
         }
     } catch (error) {
         console.error("Error searching anime:", error.message);
     }
 }
-module.exports = {getRandom , getWaifu , getFact , SearchAnime}
+module.exports = { getRandomAnime, getWaifu, getFact, SearchAnime }
