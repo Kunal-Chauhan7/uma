@@ -7,6 +7,8 @@ const { getRandomAnime, getWaifu , getFact, SearchAnime } = require('./anime/ani
 const { sendMeme } = require('./media/meme');
 const { makeSticker } = require('./media/sticker');
 const { ping } = require('./Group/Group');
+const { isAdmin } = require('./admin');
+const {creator , creatorNumber} = require('./superadmin');
 
 // Initialize WhatsApp client
 const uma = new Client({
@@ -105,9 +107,23 @@ uma.on('message', async (message) => {
     // Command: !everyone
     // ping everyone in the group
     else if(content.startsWith("!everyone")){
-        ping(message,content);
+        const UserIsAdmin = await (isAdmin(message));
+        const chat = await message.getChat();
+        if(UserIsAdmin || message.author === creator){
+            ping(message,content);
+        }
+        else{
+            message.reply("*Either You are not an admin or you are not Kunal Chauhan!*");
+        }
     }
 });
+
+/* 
+            to check if the user is Kunal Chauhan
+            if(message.author === creator){
+            message.reply("Kunal Chauhan is here");
+        }
+*/
 
 // Initialize the client
 uma.initialize();
