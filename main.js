@@ -1,13 +1,12 @@
-const { Client, MessageMedia, LocalAuth } = require('whatsapp-web.js');
+const { Client, LocalAuth ,  } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const { flipACoin, rollADice } = require('./Gamble/Gamble');
 const { greet } = require('./UserInteraction/UserInteraction');
-const fs = require('fs');
-const mime = require('mime-types');
 const { getPokemon } = require('./media/Pokemon');
 const { getRandomAnime, getWaifu , getFact, SearchAnime } = require('./anime/anime');
 const { sendMeme } = require('./media/meme');
 const { makeSticker } = require('./media/sticker');
+const { ping } = require('./Group/Group');
 
 // Initialize WhatsApp client
 const uma = new Client({
@@ -40,7 +39,7 @@ uma.on('disconnected', (reason) => {
 
 
 // Event: when a new message is received
-uma.on('message_create', async (message) => {
+uma.on('message', async (message) => {
     const content = message.body;
 
     // Ensure content is a string and not empty before processing
@@ -106,21 +105,7 @@ uma.on('message_create', async (message) => {
     // Command: !everyone
     // ping everyone in the group
     else if(content.startsWith("!everyone")){
-        const chat = await message.getChat();
-        if(chat.isGroup){
-            let What_to_ping = content.substring(10);
-            let User_who_crteaed = message.getContact();
-            let messageContent = `@${(await User_who_crteaed).id.user} says : \n \n *_${What_to_ping}_* \n \n `;
-            let mentions = [];
-            for(let participant of chat.participants){
-                mentions.push(`${participant.id.user}@c.us`);
-                messageContent += `@${participant.id.user} `;
-            }
-            await chat.sendMessage(messageContent,{mentions});
-        }
-        else{
-            message.reply("You can only ping in groups");
-        }
+        ping(message,content);
     }
 });
 
