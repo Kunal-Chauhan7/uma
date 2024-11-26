@@ -4,10 +4,10 @@ const { flipACoin, rollADice } = require('./Gamble/Gamble');
 const { greet } = require('./UserInteraction/UserInteraction');
 const fs = require('fs');
 const mime = require('mime-types');
-const axios = require('axios');
 const { getPokemon } = require('./media/Pokemon');
 const { getRandomAnime, getWaifu , getFact, SearchAnime } = require('./anime/anime');
 const { sendMeme } = require('./media/meme');
+const { makeSticker } = require('./media/sticker');
 
 // Initialize WhatsApp client
 const uma = new Client({
@@ -65,51 +65,7 @@ uma.on('message_create', async (message) => {
     // Command: !sticker
     // Convert an image or gif to a sticker
     else if (content === '!sticker') {
-        if(message.hasMedia && message.isGif){
-            message.downloadMedia().then(media=>{
-                message.reply(media,message.from,{
-                    sendMediaAsSticker:true,
-                    stickerAuthor: "Kunal Chauhan",
-                    stickerName: "Created By Kunal Chauhan & uma"});
-            });
-            message.react("✅");
-        }
-        else if (message.hasMedia) {
-            message.downloadMedia().then(async media => {
-                const extension = mime.extension(media.mimetype);
-                if(extension==='jpeg'){
-                    const mediaPath = './downloaded-media/';
-                    if (!fs.existsSync(mediaPath)) {
-                        fs.mkdirSync(mediaPath);
-                    }
-                    const filename = new Date().getTime();
-                    const fullFilename = mediaPath + filename + '.' + extension;
-                    try {
-                        fs.writeFileSync(fullFilename, media.data, { encoding: 'base64' });
-                        message.reply(new MessageMedia(media.mimetype, media.data, filename), message.from, {
-                            sendMediaAsSticker: true,
-                            stickerAuthor: "Kunal Chauhan",
-                            stickerName: "Created By Kunal Chauhan & uma"
-                        });
-                        message.react("✅");
-                        fs.unlinkSync(fullFilename);
-                    } catch (err) {
-                        console.log('Failed to save the file:', err);
-                    }
-                }
-                else if(extension==='mp4'){
-                    message.downloadMedia().then(media=>{
-                        message.reply(media,message.from,{
-                            sendMediaAsSticker:true,
-                            stickerAuthor: "Kunal Chauhan",
-                            stickerName: "Created By Kunal Chauhan & uma"});
-                    });
-                    message.react("✅");
-                }
-            });
-        } else {
-            message.reply(`Send an image or gif or video with caption *!sticker* `);
-        }
+       makeSticker(message);
     }
     // Command: !meme
     //  Get a random meme
