@@ -6,7 +6,7 @@ const { getPokemon } = require('./media/Pokemon');
 const { getRandomAnime, getWaifu , getFact, SearchAnime } = require('./anime/anime');
 const { sendMeme } = require('./media/meme');
 const { makeSticker } = require('./media/sticker');
-const { ping } = require('./Group/Group');
+const { ping, pick } = require('./Group/Group');
 const { isAdmin } = require('./admin');
 const {creator , creatorNumber} = require('./superadmin');
 
@@ -115,6 +115,9 @@ uma.on('message', async (message) => {
         else{
             message.reply("*Either You are not an admin or you are not Kunal Chauhan!*");
         }
+    }
+    else if(content.startsWith("!pick")){
+        pick(message,content);
     }
 });
 
