@@ -19,6 +19,7 @@
   "keywords": [],
   "dependencies": {
     "anime-character-random": "^1.0.14",
+    "anime-wallpaper": "^3.2.2",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
     "mime-types": "^2.1.35",

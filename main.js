@@ -9,6 +9,7 @@ const { makeSticker } = require('./media/sticker');
 const { ping, pick } = require('./Group/Group');
 const { isAdmin } = require('./admin');
 const {creator , creatorNumber} = require('./superadmin');
+const { wallpaper } = require('./media/wallpaper');
 
 // Initialize WhatsApp client
 const uma = new Client({
@@ -116,9 +117,18 @@ uma.on('message', async (message) => {
             message.reply("*Either You are not an admin or you are not Kunal Chauhan!*");
         }
     }
+    // Command: !pick
+    // pick random people from the group
     else if(content.startsWith("!pick")){
         pick(message,content);
     }
+    else if(content.startsWith("!wallpaper")){
+        wallpaper(message,content);
+    }
+
+    // else if (content.startsWith("!help")) {
+    //     message.reply("Commands: \n !ping \n !flip \n !sticker \n !meme \n !pokemon \n !getrandomanime \n !roll \n !waifu \n !fact \n !animeSearch \n !everyone \n !pick \n !help");
+    // }
 });
 
 /* 
