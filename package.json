@@ -22,6 +22,7 @@
     "anime-wallpaper": "^3.2.2",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
+    "lowdb": "^2.1.0",
     "mime-types": "^2.1.35",
     "nekos.life": "^3.0.0",
     "puppeteer": "^23.9.0",
