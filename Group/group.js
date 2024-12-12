@@ -38,8 +38,43 @@ const pick = async (message, content) => {
         finalMessage += `@${participant.id.user}`;
         mentions.push(`${participant.id.user}@c.us`);
     }
-    await chat.sendMessage(finalMessage,{mentions});
+    await chat.sendMessage(finalMessage, { mentions });
 }
 
+const ship = async (message, content) => {
+    const chat = await message.getChat();
+    if (!chat.isGroup) {
+        message.reply("You can only use this command in groups");
+        return;
+    }
+    let text = '';
+    let mentions = [];
+    let randomPercentage = Math.floor(Math.random() * 100);
+    const mentionInMessage = await message.getMentions();
+    for (let participant of mentionInMessage) {
+        mentions.push(`${participant.id.user}@c.us`);
+        text += `@${participant.id.user} `;
+    }
+    text = text + ` has a compatibility of \n *${randomPercentage}%*`;
+    if(randomPercentage === 100){
+        text += `\n\n *Perfect Match* \n You guys are made In Heaven`;
+    }
+    else if(randomPercentage > 80){
+        text += `\n\n *Very Good Match* \n You guys are made for each other`;
+    }
+    else if(randomPercentage > 60){
+        text += `\n\n *Good Match* \n You can give it a try`;
+    }
+    else if(randomPercentage > 40){
+        text += `\n\n *Average Match* \n You can be friends`;
+    }
+    else if(randomPercentage > 20){
+        text += `\n\n *Bad Match* \n Maybe try to avoid each other`;
+    }
+    else{
+        text += `\n\n *Very Bad Match* \n Try to avoid each other`;
+    }
+    await chat.sendMessage(text, { mentions });
+}
 
-module.exports = { ping , pick};
+module.exports = { ping, pick, ship };

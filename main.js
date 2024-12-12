@@ -6,7 +6,7 @@ const { getPokemon } = require('./media/Pokemon');
 const { getRandomAnime, getWaifu , getFact, SearchAnime } = require('./anime/anime');
 const { sendMeme } = require('./media/meme');
 const { makeSticker } = require('./media/sticker');
-const { ping, pick } = require('./Group/Group');
+const { ping, pick , ship } = require('./Group/group');
 const { isAdmin } = require('./admin');
 const {creator , creatorNumber} = require('./superadmin');
 const { wallpaper } = require('./media/wallpaper');
@@ -124,6 +124,10 @@ uma.on('message', async (message) => {
     }
     else if(content.startsWith("!wallpaper")){
         wallpaper(message,content);
+    }
+    
+    else if(content.startsWith("!ship")){
+        ship(message,content);
     }
 
     // else if (content.startsWith("!help")) {
