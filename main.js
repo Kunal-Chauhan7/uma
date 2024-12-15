@@ -1,15 +1,16 @@
 const { Client, LocalAuth, } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const { flipACoin, rollADice } = require('./Gamble/Gamble');
-const { greet } = require('./UserInteraction/UserInteraction');
+const { greet, Why, CatText, OwOify } = require('./UserInteraction/UserInteraction');
 const { getPokemon } = require('./media/Pokemon');
-const { getRandomAnime, getWaifu, getFact, SearchAnime } = require('./anime/anime');
+const { getRandomAnime, getWaifu, getFact, SearchAnime, Neko, Avatar, Gecg, FoxGirl, NekoGif } = require('./anime/anime');
 const { sendMeme } = require('./media/meme');
 const { makeSticker } = require('./media/sticker');
 const { ping, pick, ship, Smug, Tickle, Slap, Pat, Cuddle, Feed, Hug, Kiss } = require('./Group/group');
 const { isAdmin } = require('./admin');
 const { creator, creatorNumber } = require('./superadmin');
 const { wallpaper } = require('./media/wallpaper');
+const { Meow, Goose, Woof } = require('./media/Media');
 
 // Initialize WhatsApp client
 const uma = new Client({
@@ -156,6 +157,39 @@ uma.on('message', async (message) => {
     }
     else if (content.startsWith("!kiss")) {
         Kiss(message, content);
+    }
+    else if(content.startsWith("!why")){
+        Why(message, content);
+    }
+    else if(content.startsWith("!cattext")){
+        CatText(message, content);
+    }
+    else if(content.startsWith("!owoify")){
+        OwOify(message, content);
+    }
+    else if(content.startsWith("!meow")){
+        Meow(message, content);
+    }
+    else if(content.startsWith("!woof")){
+        Woof(message, content);
+    }
+    else if(content.startsWith("!goose")){
+        Goose(message, content);
+    }
+    else if(content.startsWith("!neko")){
+        Neko(message, content);
+    }
+    else if(content.startsWith("!nekoGif")){
+        NekoGif(message, content);
+    }
+    else if(content.startsWith("!foxGirl")){
+        FoxGirl(message, content);
+    }
+    else if(content.startsWith("!gecg")){
+        Gecg(message, content);
+    }
+    else if(content.startsWith("!avatar")){
+        Avatar(message, content);
     }
     // else if (content.startsWith("!help")) {
     //     message.reply("Commands: \n !ping \n !flip \n !sticker \n !meme \n !pokemon \n !getrandomanime \n !roll \n !waifu \n !fact \n !animeSearch \n !everyone \n !pick \n !help");

@@ -66,20 +66,34 @@ const SearchAnime = async (query, message) => {
         console.error("Error searching anime:", error.message);
     }
 }
-const Neko = async () => {
-
+const Neko = async (message, content) => {
+    let urlNeko = (await neko.neko()).url;
+    const media = await MessageMedia.fromUrl(urlNeko);
+    message.reply(media, message.from, { caption: "*Here You Have This cute kitty*" });
+    message.react("😺");
 }
-const NekoGif = async () => {
-
+const NekoGif = async (message, content) => {
+    let urlNeko = (await neko.nekoGif()).url;
+    const media = await MessageMedia.fromUrl(urlNeko);
+    message.reply(media, message.from, { caption: "*Here You Have This cute kitty*" });
+    message.react("😽");
 }
-const FoxGirl = async () => {
-
+const FoxGirl = async (message, content) => {
+    let urlFox = (await neko.foxGirl()).url;
+    const media = await MessageMedia.fromUrl(urlFox);
+    message.reply(media, message.from, { caption: "*Here You Have This Hot fox*" });
+    message.react("🦊");
 }
-const Gecg = async () => {
-
+const Gecg = async (message, content) => {
+    let urlGecg = (await neko.gecg()).url;
+    const media = await MessageMedia.fromUrl(urlGecg);
+    message.reply(media, message.from, { caption: "*I hope you know what are you doing*" });
+    message.react("😼");
 }
-
-const Avatar = async () => {
-
+const Avatar = async (message, content) => {
+    let urlAvtar = (await neko.avatar()).url;
+    const media = await MessageMedia.fromUrl(urlAvtar);
+    message.reply(media, message.from, { caption: "*This will look good in your dp*" });
+    message.react("🤔");
 }
-module.exports = { getRandomAnime, getWaifu, getFact, SearchAnime }
+module.exports = { getRandomAnime, getWaifu, getFact, SearchAnime, Neko, NekoGif, FoxGirl, Gecg, Avatar };
