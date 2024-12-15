@@ -66,4 +66,20 @@ const SearchAnime = async (query, message) => {
         console.error("Error searching anime:", error.message);
     }
 }
+const Neko = async () => {
+
+}
+const NekoGif = async () => {
+
+}
+const FoxGirl = async () => {
+
+}
+const Gecg = async () => {
+
+}
+
+const Avatar = async () => {
+
+}
 module.exports = { getRandomAnime, getWaifu, getFact, SearchAnime }

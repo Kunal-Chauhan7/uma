@@ -100,9 +100,9 @@ const Smug = async (message, content) => {
     let urlSmug = (await neko.smug()).url;
     const media = await MessageMedia.fromUrl(urlSmug);
     message.react("🤷‍♂️");
-    message.reply(media, message.from, { caption: text , mentions});
+    message.reply(media, message.from, { caption: text, mentions });
 }
-const Tickle = async (message , content) => {
+const Tickle = async (message, content) => {
     const chat = await message.getChat();
     if (!chat.isGroup) {
         message.reply("You can only use this command in groups");
@@ -121,9 +121,9 @@ const Tickle = async (message , content) => {
     let urlTickle = (await neko.tickle()).url;
     const media = await MessageMedia.fromUrl(urlTickle);
     message.react("🪶");
-    message.reply(media, message.from, { caption: text , mentions});
+    message.reply(media, message.from, { caption: text, mentions });
 }
-const Slap = async (message , content) => {
+const Slap = async (message, content) => {
     const chat = await message.getChat();
     if (!chat.isGroup) {
         message.reply("You can only use this command in groups");
@@ -142,9 +142,9 @@ const Slap = async (message , content) => {
     let urlSlap = (await neko.slap()).url;
     const media = await MessageMedia.fromUrl(urlSlap);
     message.react("🤚");
-    message.reply(media, message.from, { caption: text , mentions});
+    message.reply(media, message.from, { caption: text, mentions });
 }
-const Pat = async (message , content) => {
+const Pat = async (message, content) => {
     const chat = await message.getChat();
     if (!chat.isGroup) {
         message.reply("You can only use this command in groups");
@@ -163,51 +163,91 @@ const Pat = async (message , content) => {
     let urlPat = (await neko.pat()).url;
     const media = await MessageMedia.fromUrl(urlPat);
     message.react("🥰");
-    message.reply(media, message.from, { caption: text , mentions});
+    message.reply(media, message.from, { caption: text, mentions });
 }
-const Neko = async () => {
+const Kiss = async (message, content) => {
+    const chat = await message.getChat();
+    if (!chat.isGroup) {
+        message.reply("You can only use this command in groups");
+        return;
+    }
+    let User_who_crteaed = await message.getContact();
+    let text = '';
+    let mentions = [];
+    mentions.push(`${User_who_crteaed.id.user}@c.us`);
+    text = text + ` @${User_who_crteaed.id.user} Kissed \n`;
+    const mentionInMessage = await message.getMentions();
+    for (let participant of mentionInMessage) {
+        mentions.push(`${participant.id.user}@c.us`);
+        text += `@${participant.id.user} `;
+    }
+    let urlKiss = (await neko.kiss()).url;
+    const media = await MessageMedia.fromUrl(urlKiss);
+    message.react("😘");
+    message.reply(media, message.from, { caption: text, mentions });
+}
+const Hug = async (message, content) => {
+    const chat = await message.getChat();
+    if (!chat.isGroup) {
+        message.reply("You can only use this command in groups");
+        return;
+    }
+    let User_who_crteaed = await message.getContact();
+    let text = '';
+    let mentions = [];
+    mentions.push(`${User_who_crteaed.id.user}@c.us`);
+    text = text + ` @${User_who_crteaed.id.user} Hugged \n`;
+    const mentionInMessage = await message.getMentions();
+    for (let participant of mentionInMessage) {
+        mentions.push(`${participant.id.user}@c.us`);
+        text += `@${participant.id.user} `;
+    }
+    let urlHug = (await neko.hug()).url;
+    const media = await MessageMedia.fromUrl(urlHug);
+    message.react("🫂");
+    message.reply(media, message.from, { caption: text, mentions });
+}
+const Feed = async (message, content) => {
+    const chat = await message.getChat();
+    if (!chat.isGroup) {
+        message.reply("You can only use this command in groups");
+        return;
+    }
+    let User_who_crteaed = await message.getContact();
+    let text = '';
+    let mentions = [];
+    mentions.push(`${User_who_crteaed.id.user}@c.us`);
+    text = text + ` @${User_who_crteaed.id.user} Fed \n`;
+    const mentionInMessage = await message.getMentions();
+    for (let participant of mentionInMessage) {
+        mentions.push(`${participant.id.user}@c.us`);
+        text += `@${participant.id.user} `;
+    }
+    let urlFeed = (await neko.feed()).url;
+    const media = await MessageMedia.fromUrl(urlFeed);
+    message.react("🍕");
+    message.reply(media, message.from, { caption: text, mentions });
+}
+const Cuddle = async (message, content) => {
+    const chat = await message.getChat();
+    if (!chat.isGroup) {
+        message.reply("You can only use this command in groups");
+        return;
+    }
+    let User_who_crteaed = await message.getContact();
+    let text = '';
+    let mentions = [];
+    mentions.push(`${User_who_crteaed.id.user}@c.us`);
+    text = text + ` @${User_who_crteaed.id.user} Cuddled \n`;
+    const mentionInMessage = await message.getMentions();
+    for (let participant of mentionInMessage) {
+        mentions.push(`${participant.id.user}@c.us`);
+        text += `@${participant.id.user} `;
+    }
+    let urlCuddle = (await neko.cuddle()).url;
+    const media = await MessageMedia.fromUrl(urlCuddle);
+    message.react("🤗");
+    message.reply(media, message.from, { caption: text, mentions });
+}
 
-}
-const NekoGif = async () => {
-
-}
-const Meow = async () => {
-
-}
-const Kiss = async () => {
-
-}
-const Hug = async () => {
-
-}
-const FoxGirl = async () => {
-
-}
-const Feed = async () => {
-
-}
-const Cuddle = async () => {
-
-}
-const Woof = async () => {
-
-}
-const Goose = async () => {
-
-}
-const Gecg = async () => {
-
-}
-const Avatar = async () => {
-
-}
-const Why = async () => {
-
-}
-const CatText = async () => {
-
-}
-const OwOify = async () => {
-
-}
-module.exports = { ping, pick, ship, Smug, Tickle, Slap, Pat, Neko, NekoGif, Meow, Kiss, Hug, FoxGirl, Feed, Cuddle, Woof, Goose, Gecg, Avatar, Why, CatText, OwOify };
+module.exports = { ping, pick, ship, Smug, Tickle, Slap, Pat, Kiss, Hug, Feed, Cuddle };

@@ -3,4 +3,15 @@ const greet = (message , Contact)=>{
     message.react("✅")
 }
 
+const Why = async () => {
+
+}
+
+const CatText = async () => {
+
+}
+const OwOify = async () => {
+
+}
+
 module.exports = {greet};
